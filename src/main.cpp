@@ -100,6 +100,9 @@ class ScoreDisplay {
 
 class Player {
     public:
+        bn::sprite_ptr sprite;
+        bn::fixed speed;
+        
         /**
          * Update the position and bounding box of the player based on d-pad movement.
          */
