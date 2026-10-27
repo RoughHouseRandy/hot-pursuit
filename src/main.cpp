@@ -103,6 +103,19 @@ class Player {
         /**
          * Update the position and bounding box of the player based on d-pad movement.
          */
+        bn::sprite_ptr sprite;
+        bn::fixed start_x = 44;
+        bn::fixed start_y = 22;
+        // bn::rect hitbox = bounding_box;
+
+        Player(bn::fixed speed, bn::size size) : sprite(bn::sprite_items::dot.create_sprite(start_x, start_y)) {
+            bn::fixed player_speed = speed;
+            bn::size player_size = size;
+            bn::rect hitbox = create_bounding_box(sprite, size);
+            sprite.set_x(start_x);
+            sprite.set_y(start_y);
+        };
+
         void update() {
             if(bn::keypad::right_held()) {
                 sprite.set_x(sprite.x() + speed);
@@ -114,6 +127,8 @@ class Player {
 
             bounding_box = create_bounding_box(sprite, size);
         }
+
+        
 
         // Create the sprite. This will be moved to a constructor
         bn::sprite_ptr sprite = bn::sprite_items::dot.create_sprite();
@@ -130,12 +145,7 @@ int main() {
 
     // Create a player and initialize it
     // TODO: we will move the initialization logic to a constructor.
-    Player player = Player();
-    player.sprite.set_x(44);
-    player.sprite.set_y(22);
-    player.speed = 1.5;
-    player.size = PLAYER_SIZE;
-    player.bounding_box = create_bounding_box(player.sprite, player.size);
+    Player player = Player(1.5, PLAYER_SIZE);
 
     bn::sprite_ptr enemy_sprite = bn::sprite_items::square.create_sprite(-30, 22);
     bn::rect enemy_bounding_box = create_bounding_box(enemy_sprite, ENEMY_SIZE);
