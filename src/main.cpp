@@ -156,7 +156,17 @@ public:
         bounding_box = create_bounding_box(sprite, size);
     }
 
-    // Create the sprite. This will be moved to a constructor
+        bn::fixed get_x_coordinate()
+        {
+            bn::fixed x_pos = sprite.x();
+            return x_pos;
+        }
+        
+        bn::fixed get_y_coordinate()
+        {
+            bn::fixed y_pos = sprite.y();
+            return y_pos;
+        }
 };
 
 class Enemy
@@ -175,6 +185,30 @@ public:
         speed = 1.5;
         enemy_size = ENEMY_SIZE;
         bounding_box = create_bounding_box(enemy_sprite, enemy_size);
+    }
+
+    void update(Player& player)
+    {
+        if(player.get_x_coordinate() > enemy_sprite.x())
+        {
+            enemy_sprite.set_x(enemy_sprite.x() + speed);
+        }
+        
+        if(player.get_x_coordinate() < enemy_sprite.x())
+        {  
+            enemy_sprite.set_x(enemy_sprite.x() - speed);
+        }
+        
+        if(player.get_y_coordinate() > enemy_sprite.y())
+        {
+            enemy_sprite.set_y(enemy_sprite.y() + speed);
+        }
+
+        if(player.get_y_coordinate() < enemy_sprite.y())
+        {
+            enemy_sprite.set_y(enemy_sprite.y() - speed);
+        }
+
     }
 
 };
@@ -197,6 +231,7 @@ int main()
     while (true)
     {
         player.update();
+        enemy.update(player);
 
         // Reset the current score and player position if the player collides with enemy
         if (enemy.bounding_box.intersects(player.bounding_box))
