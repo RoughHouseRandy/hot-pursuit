@@ -27,6 +27,10 @@ static constexpr int MAX_SCORE_CHARS = 22;
 static constexpr int SCORE_X = 70;
 static constexpr int SCORE_Y = -70;
 
+// Player start location
+static constexpr int START_X = 44;
+static constexpr int START_Y = 22;
+
 // High score location
 static constexpr int HIGH_SCORE_X = -70;
 static constexpr int HIGH_SCORE_Y = -70;
@@ -107,19 +111,24 @@ public:
 class Player
 {
 public:
-    bn::sprite_ptr sprite;
-    bn::fixed x_spawn;
-    bn::fixed y_spawn;
-    bn::fixed speed;
-    bn::rect bounding_box;
-
-    Player(bn::sprite_ptr sprite, bn::fixed x_spawn, bn::fixed y_spawn) : sprite(bn::sprite_items::dot.create_sprite(x_spawn,y_spawn)),
-    bounding_box(create_bounding_box(sprite,PLAYER_SIZE)){
-
-    }
     /**
      * Update the position and bounding box of the player based on d-pad movement.
      */
+
+    bn::sprite_ptr sprite = bn::sprite_items::dot.create_sprite();
+    bn::fixed speed;       // The speed of the player
+    bn::size size;         // The width and height of the sprite
+    bn::rect bounding_box; // The rectangle around the sprite for checking collision
+
+    Player(int start_x, int start_y)
+    {
+        sprite.set_x(start_x);
+        sprite.set_y(start_y);
+        speed = 1.5;
+        size = PLAYER_SIZE;
+        bounding_box = create_bounding_box(sprite, size);
+    }
+
     void update()
     {
         if (bn::keypad::right_held())
@@ -136,10 +145,6 @@ public:
     }
 
     // Create the sprite. This will be moved to a constructor
-    bn::sprite_ptr sprite = bn::sprite_items::dot.create_sprite();
-    bn::fixed speed;       // The speed of the player
-    bn::size size;         // The width and height of the sprite
-    bn::rect bounding_box; // The rectangle around the sprite for checking collision
 };
 
 int main()
@@ -151,12 +156,7 @@ int main()
 
     // Create a player and initialize it
     // TODO: we will move the initialization logic to a constructor.
-    Player player = Player();
-    player.sprite.set_x(44);
-    player.sprite.set_y(22);
-    player.speed = 1.5;
-    player.size = PLAYER_SIZE;
-    player.bounding_box = create_bounding_box(player.sprite, player.size);
+    Player player = Player(START_X, START_Y);
 
     bn::sprite_ptr enemy_sprite = bn::sprite_items::square.create_sprite(-30, 22);
     bn::rect enemy_bounding_box = create_bounding_box(enemy_sprite, ENEMY_SIZE);
