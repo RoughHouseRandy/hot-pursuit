@@ -32,8 +32,8 @@ static constexpr int START_X = 44;
 static constexpr int START_Y = 22;
 
 // Enemy start location
-static constexpr int ENEMY_X = -30;
-static constexpr int ENEMY_Y = 22;
+static constexpr int ENEMY_X = 0;
+static constexpr int ENEMY_Y = 0;
 
 // High score location
 static constexpr int HIGH_SCORE_X = -70;
@@ -174,7 +174,7 @@ class Enemy
 public:
     bn::sprite_ptr enemy_sprite = bn::sprite_items::square.create_sprite();
     bn::fixed speed;     // Speed of the enemy
-    bn::size enemy_size; // Enemy height and widht
+    bn::size enemy_size; // Enemy height and width
     // Enemy hitbox
     bn::rect bounding_box = create_bounding_box(enemy_sprite, ENEMY_SIZE);
 
@@ -225,8 +225,6 @@ int main()
     Player player = Player(START_X, START_Y);
 
     Enemy enemy = Enemy(ENEMY_X, ENEMY_Y);
-    // bn::sprite_ptr enemy_sprite = bn::sprite_items::square.create_sprite(-30, 22);
-    // bn::rect enemy_bounding_box = create_bounding_box(enemy_sprite, ENEMY_SIZE);
 
     while (true)
     {
