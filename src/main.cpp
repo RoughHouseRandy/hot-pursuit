@@ -182,7 +182,7 @@ public:
     {
         enemy_sprite.set_x(start_x);
         enemy_sprite.set_y(start_y);
-        speed = 1.5;
+        speed = 1;
         enemy_size = ENEMY_SIZE;
         bounding_box = create_bounding_box(enemy_sprite, enemy_size);
     }
