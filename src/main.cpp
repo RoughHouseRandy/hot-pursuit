@@ -27,7 +27,6 @@ static constexpr int MAX_SCORE_CHARS = 22;
 // Create a random number generator seed
 bn::random gen;
 
-
 // Method to generate random x-coordinate
 bn::fixed random_x_gen()
 {
@@ -172,6 +171,26 @@ public:
             sprite.set_y(sprite.y() + speed);
         }
 
+        // Add x scroll logic
+        if (get_x_coordinate() > MAX_X)
+        {
+            sprite.set_x(MIN_X);
+        }
+        if (get_x_coordinate() < MIN_X)
+        {
+            sprite.set_x(MAX_X);
+        }
+
+        // Add y scroll logic
+        if (get_y_coordinate() > MAX_Y)
+        {
+            sprite.set_y(MIN_Y);
+        }
+        if (get_y_coordinate() < MIN_Y)
+        {
+            sprite.set_y(MAX_Y);
+        }
+
         bounding_box = create_bounding_box(sprite, size);
     }
 
@@ -206,7 +225,7 @@ public:
         bounding_box = create_bounding_box(enemy_sprite, enemy_size);
     }
 
-    void update(Player& player)
+    void update(Player &player)
     {
         if (player.get_x_coordinate() > enemy_sprite.x())
         {
@@ -227,7 +246,7 @@ public:
         {
             enemy_sprite.set_y(enemy_sprite.y() - speed);
         }
-        
+
         bounding_box = create_bounding_box(enemy_sprite, enemy_size);
     }
 };
