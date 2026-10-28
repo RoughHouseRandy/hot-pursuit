@@ -10,6 +10,7 @@
 #include "common_fixed_8x16_font.h"
 #include "bn_sprite_items_dot.h"
 #include "bn_sprite_items_square.h"
+#include "bn_random.h"
 
 // Width and height of the the player bounding box
 static constexpr bn::size PLAYER_SIZE = {8, 8};
@@ -22,6 +23,24 @@ static constexpr int MAX_X = bn::display::width() / 2;
 
 // Number of characters required to show two of the longest numer possible in an int (-2147483647)
 static constexpr int MAX_SCORE_CHARS = 22;
+
+// Create a random number generator seed
+bn::random gen;
+
+
+// Method to generate random x-coordinate
+bn::fixed random_x_gen()
+{
+    bn::fixed random_x = gen.get_fixed(MIN_X, MAX_X);
+    return random_x;
+}
+
+// Method to generate random y-coordinate
+bn::fixed random_y_gen()
+{
+    bn::fixed random_y = gen.get_fixed(MIN_Y, MAX_Y);
+    return random_y;
+}
 
 // Score location
 static constexpr int SCORE_X = 70;
@@ -156,17 +175,17 @@ public:
         bounding_box = create_bounding_box(sprite, size);
     }
 
-        bn::fixed get_x_coordinate()
-        {
-            bn::fixed x_pos = sprite.x();
-            return x_pos;
-        }
-        
-        bn::fixed get_y_coordinate()
-        {
-            bn::fixed y_pos = sprite.y();
-            return y_pos;
-        }
+    bn::fixed get_x_coordinate()
+    {
+        bn::fixed x_pos = sprite.x();
+        return x_pos;
+    }
+
+    bn::fixed get_y_coordinate()
+    {
+        bn::fixed y_pos = sprite.y();
+        return y_pos;
+    }
 };
 
 class Enemy
@@ -187,30 +206,28 @@ public:
         bounding_box = create_bounding_box(enemy_sprite, enemy_size);
     }
 
-    void update(Player& player)
+    void update(Player &player)
     {
-        if(player.get_x_coordinate() > enemy_sprite.x())
+        if (player.get_x_coordinate() > enemy_sprite.x())
         {
             enemy_sprite.set_x(enemy_sprite.x() + speed);
         }
-        
-        if(player.get_x_coordinate() < enemy_sprite.x())
-        {  
+
+        if (player.get_x_coordinate() < enemy_sprite.x())
+        {
             enemy_sprite.set_x(enemy_sprite.x() - speed);
         }
-        
-        if(player.get_y_coordinate() > enemy_sprite.y())
+
+        if (player.get_y_coordinate() > enemy_sprite.y())
         {
             enemy_sprite.set_y(enemy_sprite.y() + speed);
         }
 
-        if(player.get_y_coordinate() < enemy_sprite.y())
+        if (player.get_y_coordinate() < enemy_sprite.y())
         {
             enemy_sprite.set_y(enemy_sprite.y() - speed);
         }
-
     }
-
 };
 
 int main()
@@ -237,6 +254,8 @@ int main()
             scoreDisplay.resetScore();
             player.sprite.set_x(44);
             player.sprite.set_y(22);
+            enemy.enemy_sprite.set_y(random_y_gen());
+            enemy.enemy_sprite.set_x(random_x_gen());
         }
 
         // Update the scores and disaply them
