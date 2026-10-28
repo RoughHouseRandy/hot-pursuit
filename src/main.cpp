@@ -111,8 +111,12 @@ public:
     bn::fixed x_spawn;
     bn::fixed y_spawn;
     bn::fixed speed;
+    bn::rect bounding_box;
 
-    Player(bn::sprite_ptr sprite, bn::fixed x_spawn, bn::fixed y_spawn) : 
+    Player(bn::sprite_ptr sprite, bn::fixed x_spawn, bn::fixed y_spawn) : sprite(bn::sprite_items::dot.create_sprite(x_spawn,y_spawn)),
+    bounding_box(create_bounding_box(sprite,PLAYER_SIZE)){
+
+    }
     /**
      * Update the position and bounding box of the player based on d-pad movement.
      */
