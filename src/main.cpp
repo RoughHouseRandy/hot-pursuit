@@ -166,7 +166,7 @@ public:
     bn::fixed speed;     // Speed of the enemy
     bn::size enemy_size; // Enemy height and widht
     // Enemy hitbox
-    bn::rect enemy_bounding_box = create_bounding_box(enemy_sprite, ENEMY_SIZE);
+    bn::rect bounding_box = create_bounding_box(enemy_sprite, ENEMY_SIZE);
 
     Enemy(int start_x, int start_y)
     {
@@ -174,7 +174,7 @@ public:
         enemy_sprite.set_y(start_y);
         speed = 1.5;
         enemy_size = ENEMY_SIZE;
-        enemy_bounding_box = create_bounding_box(enemy_sprite, enemy_size);
+        bounding_box = create_bounding_box(enemy_sprite, enemy_size);
     }
 
 };
@@ -199,7 +199,7 @@ int main()
         player.update();
 
         // Reset the current score and player position if the player collides with enemy
-        if (enemy.enemy_bounding_box.intersects(player.bounding_box))
+        if (enemy.bounding_box.intersects(player.bounding_box))
         {
             scoreDisplay.resetScore();
             player.sprite.set_x(44);
