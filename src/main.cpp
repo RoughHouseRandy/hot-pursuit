@@ -206,7 +206,7 @@ public:
         bounding_box = create_bounding_box(enemy_sprite, enemy_size);
     }
 
-    void update(Player &player)
+    void update(Player& player)
     {
         if (player.get_x_coordinate() > enemy_sprite.x())
         {
@@ -227,6 +227,8 @@ public:
         {
             enemy_sprite.set_y(enemy_sprite.y() - speed);
         }
+        
+        bounding_box = create_bounding_box(enemy_sprite, enemy_size);
     }
 };
 
