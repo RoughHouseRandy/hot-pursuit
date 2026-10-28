@@ -31,6 +31,10 @@ static constexpr int SCORE_Y = -70;
 static constexpr int START_X = 44;
 static constexpr int START_Y = 22;
 
+// Enemy start location
+static constexpr int ENEMY_X = -30;
+static constexpr int ENEMY_Y = 22;
+
 // High score location
 static constexpr int HIGH_SCORE_X = -70;
 static constexpr int HIGH_SCORE_Y = -70;
@@ -144,7 +148,7 @@ public:
         {
             sprite.set_y(sprite.y() - speed);
         }
-        if(bn::keypad::down_held())
+        if (bn::keypad::down_held())
         {
             sprite.set_y(sprite.y() + speed);
         }
@@ -153,6 +157,26 @@ public:
     }
 
     // Create the sprite. This will be moved to a constructor
+};
+
+class Enemy
+{
+public:
+    bn::sprite_ptr enemy_sprite = bn::sprite_items::square.create_sprite();
+    bn::fixed speed;     // Speed of the enemy
+    bn::size enemy_size; // Enemy height and widht
+    // Enemy hitbox
+    bn::rect enemy_bounding_box = create_bounding_box(enemy_sprite, ENEMY_SIZE);
+
+    Enemy(int start_x, int start_y)
+    {
+        enemy_sprite.set_x(start_x);
+        enemy_sprite.set_y(start_y);
+        speed = 1.5;
+        enemy_size = ENEMY_SIZE;
+        enemy_bounding_box = create_bounding_box(enemy_sprite, enemy_size);
+    }
+
 };
 
 int main()
@@ -166,15 +190,16 @@ int main()
     // TODO: we will move the initialization logic to a constructor.
     Player player = Player(START_X, START_Y);
 
-    bn::sprite_ptr enemy_sprite = bn::sprite_items::square.create_sprite(-30, 22);
-    bn::rect enemy_bounding_box = create_bounding_box(enemy_sprite, ENEMY_SIZE);
+    Enemy enemy = Enemy(ENEMY_X, ENEMY_Y);
+    // bn::sprite_ptr enemy_sprite = bn::sprite_items::square.create_sprite(-30, 22);
+    // bn::rect enemy_bounding_box = create_bounding_box(enemy_sprite, ENEMY_SIZE);
 
     while (true)
     {
         player.update();
 
         // Reset the current score and player position if the player collides with enemy
-        if (enemy_bounding_box.intersects(player.bounding_box))
+        if (enemy.enemy_bounding_box.intersects(player.bounding_box))
         {
             scoreDisplay.resetScore();
             player.sprite.set_x(44);
