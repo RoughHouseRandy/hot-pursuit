@@ -219,7 +219,7 @@ public:
     // Enemy hitbox
     bn::rect bounding_box = create_bounding_box(enemy_sprite, ENEMY_SIZE);
 
-    Enemy(int start_x, int start_y)
+    Enemy(bn::fixed start_x, bn::fixed start_y)
     {
         enemy_sprite.set_x(start_x);
         enemy_sprite.set_y(start_y);
@@ -252,7 +252,16 @@ public:
 
         bounding_box = create_bounding_box(enemy_sprite, enemy_size);
     }
+  
 };
+
+void add_enemies(bn::vector<Enemy, MAX_ENEMY> &enemies, bn::fixed x_spawn, bn::fixed y_spawn)
+{
+    if (enemies.size() < enemies.max_size())
+    {
+        enemies.push_back(Enemy(x_spawn, y_spawn));
+    }
+}
 
 int main()
 {
