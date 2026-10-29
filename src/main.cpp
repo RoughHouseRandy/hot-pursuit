@@ -57,6 +57,9 @@ static constexpr int ENEMY_Y = 0;
 static constexpr int HIGH_SCORE_X = -70;
 static constexpr int HIGH_SCORE_Y = -70;
 
+//Max amount of enemies
+static constexpr int MAX_ENEMY = 5;
+
 /**
  * Creates a rectangle centered at a sprite's location with a given size.
  * sprite the sprite to center the box around
@@ -263,6 +266,8 @@ int main()
     Player player = Player(START_X, START_Y);
 
     Enemy enemy = Enemy(ENEMY_X, ENEMY_Y);
+    
+    bn::vector<Enemy, MAX_ENEMY> enemies = {};
 
     while (true)
     {
