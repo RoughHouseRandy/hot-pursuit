@@ -275,9 +275,11 @@ int main()
 
     bn::vector<Enemy, MAX_ENEMY> enemies = {};
 
-    add_enemies(enemies, 0, 0);
-    add_enemies(enemies, 20, 20);
-    add_enemies(enemies, 20, -20);
+    // add_enemies(enemies, 0, 0);
+    // add_enemies(enemies, 20, 20);
+    // add_enemies(enemies, 20, -20);
+
+    int enemySpawner = 0;
 
     while (true)
     {
@@ -290,16 +292,23 @@ int main()
             if (enemy.bounding_box.intersects(player.bounding_box))
             {
                 scoreDisplay.resetScore();
-                player.sprite.set_x(44);
-                player.sprite.set_y(22);
+                player.sprite.set_x(START_X);
+                player.sprite.set_y(START_Y);
                 enemy.enemy_sprite.set_y(random_y_gen());
                 enemy.enemy_sprite.set_x(random_x_gen());
             }
         }
 
+        if(enemySpawner == 300){
+            if(enemies.size() < MAX_ENEMY){
+                enemies.push_back(Enemy(random_x_gen(),random_y_gen()));
+            }
+            enemySpawner = 0;
+        }
+
         // Update the scores and disaply them
         scoreDisplay.update();
-
+        enemySpawner++;
         bn::core::update();
     }
 }
