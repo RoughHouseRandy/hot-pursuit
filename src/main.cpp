@@ -6,6 +6,7 @@
 #include <bn_string.h>
 #include <bn_sprite_ptr.h>
 #include <bn_sprite_text_generator.h>
+#include <bn_log.h>
 
 #include "common_fixed_8x16_font.h"
 #include "bn_sprite_items_dot.h"
@@ -276,15 +277,14 @@ int main()
     bn::vector<Enemy, MAX_ENEMY> enemies = {};
 
     // Spawn the first enemy
-    Enemy firstEnemy = Enemy(ENEMY_X, ENEMY_Y);
-    enemies.push_back(firstEnemy);
+    
+    enemies.push_back(Enemy(random_x_gen(),random_y_gen()));
 
     int enemySpawner = 0;
 
     while (true)
     {
         player.update();
-
         // For each enemy in the enemies vector, call the update function to add pursuit behavior.
         for (Enemy &enemy : enemies)
         {
@@ -295,17 +295,16 @@ int main()
                 scoreDisplay.resetScore();
                 player.sprite.set_x(START_X);
                 player.sprite.set_y(START_Y);
-
-                for (int i = enemies.size(); i > 1; i--)
-                {
-                    enemies.pop_back();
+                if(enemies.size()> 0){
+                    enemies.clear();
+                    if(enemies.size() < MAX_ENEMY){
+                    enemies.push_back(Enemy(random_x_gen(),random_y_gen()));
                 }
+                }
+                
+                
                 enemySpawner = 0;
-                enemies[0].enemy_sprite.set_y(random_y_gen());
-                enemies[0].enemy_sprite.set_x(random_x_gen());
-
-                // firstEnemy.enemy_sprite.set_y(random_y_gen());
-                // firstEnemy.enemy_sprite.set_x(random_x_gen());
+            
             }
         }
 
@@ -317,6 +316,7 @@ int main()
             }
             enemySpawner = 0;
         }
+        BN_LOG(player.get_x_coordinate(), ", ", player.get_y_coordinate());
 
         // Update the scores and disaply them
         scoreDisplay.update();
