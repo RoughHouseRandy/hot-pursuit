@@ -275,9 +275,9 @@ int main()
 
     bn::vector<Enemy, MAX_ENEMY> enemies = {};
 
-    // add_enemies(enemies, 0, 0);
-    // add_enemies(enemies, 20, 20);
-    // add_enemies(enemies, 20, -20);
+    // Spawn the first enemy
+    Enemy firstEnemy = Enemy(ENEMY_X, ENEMY_Y);
+    enemies.push_back(firstEnemy);
 
     int enemySpawner = 0;
 
@@ -285,8 +285,9 @@ int main()
     {
         player.update();
 
-        //For each enemy in the enemies vector, call the update function to add pursuit behavior.
-        for (Enemy &enemy : enemies) {
+        // For each enemy in the enemies vector, call the update function to add pursuit behavior.
+        for (Enemy &enemy : enemies)
+        {
             enemy.update(player);
             // Reset the current score and player position if the player collides with enemy
             if (enemy.bounding_box.intersects(player.bounding_box))
@@ -294,14 +295,25 @@ int main()
                 scoreDisplay.resetScore();
                 player.sprite.set_x(START_X);
                 player.sprite.set_y(START_Y);
-                enemy.enemy_sprite.set_y(random_y_gen());
-                enemy.enemy_sprite.set_x(random_x_gen());
+
+                for (int i = enemies.size(); i > 1; i--)
+                {
+                    enemies.pop_back();
+                }
+                enemySpawner = 0;
+                enemies[0].enemy_sprite.set_y(random_y_gen());
+                enemies[0].enemy_sprite.set_x(random_x_gen());
+
+                // firstEnemy.enemy_sprite.set_y(random_y_gen());
+                // firstEnemy.enemy_sprite.set_x(random_x_gen());
             }
         }
 
-        if(enemySpawner == 300){
-            if(enemies.size() < MAX_ENEMY){
-                enemies.push_back(Enemy(random_x_gen(),random_y_gen()));
+        if (enemySpawner == 300)
+        {
+            if (enemies.size() < MAX_ENEMY)
+            {
+                enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
             }
             enemySpawner = 0;
         }
