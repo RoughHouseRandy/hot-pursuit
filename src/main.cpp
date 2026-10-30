@@ -57,7 +57,7 @@ static constexpr int ENEMY_Y = 0;
 static constexpr int HIGH_SCORE_X = -70;
 static constexpr int HIGH_SCORE_Y = -70;
 
-//Max amount of enemies
+// Max amount of enemies
 static constexpr int MAX_ENEMY = 5;
 
 /**
@@ -252,7 +252,6 @@ public:
 
         bounding_box = create_bounding_box(enemy_sprite, enemy_size);
     }
-  
 };
 
 void add_enemies(bn::vector<Enemy, MAX_ENEMY> &enemies, bn::fixed x_spawn, bn::fixed y_spawn)
@@ -274,23 +273,28 @@ int main()
     // TODO: we will move the initialization logic to a constructor.
     Player player = Player(START_X, START_Y);
 
-    Enemy enemy = Enemy(ENEMY_X, ENEMY_Y);
-    
     bn::vector<Enemy, MAX_ENEMY> enemies = {};
+
+    add_enemies(enemies, 0, 0);
+    add_enemies(enemies, 20, 20);
+    add_enemies(enemies, 20, -20);
 
     while (true)
     {
         player.update();
-        enemy.update(player);
 
-        // Reset the current score and player position if the player collides with enemy
-        if (enemy.bounding_box.intersects(player.bounding_box))
-        {
-            scoreDisplay.resetScore();
-            player.sprite.set_x(44);
-            player.sprite.set_y(22);
-            enemy.enemy_sprite.set_y(random_y_gen());
-            enemy.enemy_sprite.set_x(random_x_gen());
+        //For each enemy in the enemies vector, call the update function to add pursuit behavior.
+        for (Enemy &enemy : enemies) {
+            enemy.update(player);
+            // Reset the current score and player position if the player collides with enemy
+            if (enemy.bounding_box.intersects(player.bounding_box))
+            {
+                scoreDisplay.resetScore();
+                player.sprite.set_x(44);
+                player.sprite.set_y(22);
+                enemy.enemy_sprite.set_y(random_y_gen());
+                enemy.enemy_sprite.set_x(random_x_gen());
+            }
         }
 
         // Update the scores and disaply them
