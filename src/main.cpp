@@ -276,8 +276,7 @@ int main()
     bn::vector<Enemy, MAX_ENEMY> enemies = {};
 
     // Spawn the first enemy
-    Enemy firstEnemy = Enemy(ENEMY_X, ENEMY_Y);
-    enemies.push_back(firstEnemy);
+    enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
 
     int enemySpawner = 0;
 
@@ -296,16 +295,12 @@ int main()
                 player.sprite.set_x(START_X);
                 player.sprite.set_y(START_Y);
 
-                for (int i = enemies.size(); i > 1; i--)
+                if (enemies.size() > 1)
                 {
-                    enemies.pop_back();
+                    enemies.clear();
+                    enemySpawner = 0;
+                    enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
                 }
-                enemySpawner = 0;
-                enemies[0].enemy_sprite.set_y(random_y_gen());
-                enemies[0].enemy_sprite.set_x(random_x_gen());
-
-                // firstEnemy.enemy_sprite.set_y(random_y_gen());
-                // firstEnemy.enemy_sprite.set_x(random_x_gen());
             }
         }
 
