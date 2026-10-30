@@ -295,11 +295,18 @@ int main()
                 player.sprite.set_x(START_X);
                 player.sprite.set_y(START_Y);
 
-                if (enemies.size() > 1)
+                if (enemies.size() == 1)
+                {
+                    enemy.enemy_sprite.set_x(random_x_gen());
+                    enemy.enemy_sprite.set_y(random_y_gen());
+                    enemySpawner = 0;
+                } else if (enemies.size() > 1)
                 {
                     enemies.clear();
                     enemySpawner = 0;
                     enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
+                    enemy.enemy_sprite.set_x(random_x_gen());
+                    enemy.enemy_sprite.set_y(random_y_gen());
                 }
             }
         }
@@ -313,7 +320,7 @@ int main()
             enemySpawner = 0;
         }
 
-        // Update the scores and disaply them
+        // Update the scores and display them
         scoreDisplay.update();
         enemySpawner++;
         bn::core::update();
