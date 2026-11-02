@@ -277,8 +277,8 @@ int main()
     bn::vector<Enemy, MAX_ENEMY> enemies = {};
 
     // Spawn the first enemy
-    
-    enemies.push_back(Enemy(random_x_gen(),random_y_gen()));
+
+    enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
 
     int enemySpawner = 0;
 
@@ -295,16 +295,15 @@ int main()
                 scoreDisplay.resetScore();
                 player.sprite.set_x(START_X);
                 player.sprite.set_y(START_Y);
-                if(enemies.size()> 0){
+                if (enemies.size() > 0)
+                {
                     enemies.clear();
-                    if(enemies.size() < MAX_ENEMY){
-                    enemies.push_back(Enemy(random_x_gen(),random_y_gen()));
+                    if (enemies.size() < MAX_ENEMY)
+                    {
+                        enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
+                    }
+                    enemySpawner = 0;
                 }
-                }
-                
-                
-                enemySpawner = 0;
-            
             }
         }
 
@@ -316,7 +315,6 @@ int main()
             }
             enemySpawner = 0;
         }
-        BN_LOG(player.get_x_coordinate(), ", ", player.get_y_coordinate());
 
         // Update the scores and disaply them
         scoreDisplay.update();
