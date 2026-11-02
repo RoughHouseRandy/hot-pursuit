@@ -6,7 +6,6 @@
 #include <bn_string.h>
 #include <bn_sprite_ptr.h>
 #include <bn_sprite_text_generator.h>
-#include <bn_log.h>
 
 #include "common_fixed_8x16_font.h"
 #include "bn_sprite_items_dot.h"
@@ -224,7 +223,7 @@ public:
     {
         enemy_sprite.set_x(start_x);
         enemy_sprite.set_y(start_y);
-        speed = 1;
+        speed = 0.5;
         enemy_size = ENEMY_SIZE;
         bounding_box = create_bounding_box(enemy_sprite, enemy_size);
     }
@@ -277,7 +276,6 @@ int main()
     bn::vector<Enemy, MAX_ENEMY> enemies = {};
 
     // Spawn the first enemy
-
     enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
 
     int enemySpawner = 0;
@@ -285,24 +283,37 @@ int main()
     while (true)
     {
         player.update();
+
         // For each enemy in the enemies vector, call the update function to add pursuit behavior.
         for (Enemy &enemy : enemies)
         {
             enemy.update(player);
+            // Reset the current score and player position if the player collides with enemy
+        }
+
+        // For each enemy in the enemies vector, call the update function to add pursuit behavior.
+        for (Enemy &enemy : enemies)
+        {
             // Reset the current score and player position if the player collides with enemy
             if (enemy.bounding_box.intersects(player.bounding_box))
             {
                 scoreDisplay.resetScore();
                 player.sprite.set_x(START_X);
                 player.sprite.set_y(START_Y);
-                if (enemies.size() > 0)
+
+                if (enemies.size() == 1)
+                {
+                    enemy.enemy_sprite.set_x(random_x_gen());
+                    enemy.enemy_sprite.set_y(random_y_gen());
+                    enemySpawner = 0;
+                }
+                else if (enemies.size() > 1)
                 {
                     enemies.clear();
-                    if (enemies.size() < MAX_ENEMY)
-                    {
-                        enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
-                    }
                     enemySpawner = 0;
+                    enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
+                    enemy.enemy_sprite.set_x(random_x_gen());
+                    enemy.enemy_sprite.set_y(random_y_gen());
                 }
             }
         }
@@ -316,7 +327,7 @@ int main()
             enemySpawner = 0;
         }
 
-        // Update the scores and disaply them
+        // Update the scores and display them
         scoreDisplay.update();
         enemySpawner++;
         bn::core::update();
