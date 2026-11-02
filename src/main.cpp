@@ -223,7 +223,7 @@ public:
     {
         enemy_sprite.set_x(start_x);
         enemy_sprite.set_y(start_y);
-        speed = 1;
+        speed = 0.5;
         enemy_size = ENEMY_SIZE;
         bounding_box = create_bounding_box(enemy_sprite, enemy_size);
     }
@@ -289,6 +289,12 @@ int main()
         {
             enemy.update(player);
             // Reset the current score and player position if the player collides with enemy
+        }
+        
+        // For each enemy in the enemies vector, call the update function to add pursuit behavior.
+        for (Enemy &enemy : enemies)
+        {
+            // Reset the current score and player position if the player collides with enemy
             if (enemy.bounding_box.intersects(player.bounding_box))
             {
                 scoreDisplay.resetScore();
@@ -310,7 +316,7 @@ int main()
                 }
             }
         }
-
+        
         if (enemySpawner == 300)
         {
             if (enemies.size() < MAX_ENEMY)
