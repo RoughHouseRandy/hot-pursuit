@@ -11,6 +11,9 @@
 #include "bn_sprite_items_dot.h"
 #include "bn_sprite_items_square.h"
 #include "bn_random.h"
+#include "create_bounding_box.h"
+#include "Player.h"
+#include "Enemy.h"
 
 // Width and height of the the player bounding box
 static constexpr bn::size PLAYER_SIZE = {8, 8};
@@ -60,18 +63,7 @@ static constexpr int HIGH_SCORE_Y = -70;
 // Max amount of enemies
 static constexpr int MAX_ENEMY = 5;
 
-/**
- * Creates a rectangle centered at a sprite's location with a given size.
- * sprite the sprite to center the box around
- * box_size the dimensions of the bounding box
- */
-bn::rect create_bounding_box(bn::sprite_ptr sprite, bn::size box_size)
-{
-    return bn::rect(sprite.x().round_integer(),
-                    sprite.y().round_integer(),
-                    box_size.width(),
-                    box_size.height());
-}
+
 
 /**
  * Displays a score and high score.
@@ -133,126 +125,7 @@ public:
     bn::sprite_text_generator text_generator;                  // Text generator for scores
 };
 
-class Player
-{
-public:
-    /**
-     * Update the position and bounding box of the player based on d-pad movement.
-     */
 
-    bn::sprite_ptr sprite = bn::sprite_items::dot.create_sprite();
-    bn::fixed speed;       // The speed of the player
-    bn::size size;         // The width and height of the sprite
-    bn::rect bounding_box; // The rectangle around the sprite for checking collision
-
-    Player(int start_x, int start_y)
-    {
-        sprite.set_x(start_x);
-        sprite.set_y(start_y);
-        speed = 1.5;
-        size = PLAYER_SIZE;
-        bounding_box = create_bounding_box(sprite, size);
-    }
-
-    void update()
-    {
-        if (bn::keypad::right_held())
-        {
-            sprite.set_x(sprite.x() + speed);
-        }
-        if (bn::keypad::left_held())
-        {
-            sprite.set_x(sprite.x() - speed);
-        }
-        // TODO: Add logic for up and down
-        if (bn::keypad::up_held())
-        {
-            sprite.set_y(sprite.y() - speed);
-        }
-        if (bn::keypad::down_held())
-        {
-            sprite.set_y(sprite.y() + speed);
-        }
-
-        // Add x scroll logic
-        if (get_x_coordinate() > MAX_X)
-        {
-            sprite.set_x(MIN_X);
-        }
-        if (get_x_coordinate() < MIN_X)
-        {
-            sprite.set_x(MAX_X);
-        }
-
-        // Add y scroll logic
-        if (get_y_coordinate() > MAX_Y)
-        {
-            sprite.set_y(MIN_Y);
-        }
-        if (get_y_coordinate() < MIN_Y)
-        {
-            sprite.set_y(MAX_Y);
-        }
-
-        bounding_box = create_bounding_box(sprite, size);
-    }
-
-    bn::fixed get_x_coordinate()
-    {
-        bn::fixed x_pos = sprite.x();
-        return x_pos;
-    }
-
-    bn::fixed get_y_coordinate()
-    {
-        bn::fixed y_pos = sprite.y();
-        return y_pos;
-    }
-};
-
-class Enemy
-{
-public:
-    bn::sprite_ptr enemy_sprite = bn::sprite_items::square.create_sprite();
-    bn::fixed speed;     // Speed of the enemy
-    bn::size enemy_size; // Enemy height and width
-    // Enemy hitbox
-    bn::rect bounding_box = create_bounding_box(enemy_sprite, ENEMY_SIZE);
-
-    Enemy(bn::fixed start_x, bn::fixed start_y)
-    {
-        enemy_sprite.set_x(start_x);
-        enemy_sprite.set_y(start_y);
-        speed = 0.5;
-        enemy_size = ENEMY_SIZE;
-        bounding_box = create_bounding_box(enemy_sprite, enemy_size);
-    }
-
-    void update(Player &player)
-    {
-        if (player.get_x_coordinate() > enemy_sprite.x())
-        {
-            enemy_sprite.set_x(enemy_sprite.x() + speed);
-        }
-
-        if (player.get_x_coordinate() < enemy_sprite.x())
-        {
-            enemy_sprite.set_x(enemy_sprite.x() - speed);
-        }
-
-        if (player.get_y_coordinate() > enemy_sprite.y())
-        {
-            enemy_sprite.set_y(enemy_sprite.y() + speed);
-        }
-
-        if (player.get_y_coordinate() < enemy_sprite.y())
-        {
-            enemy_sprite.set_y(enemy_sprite.y() - speed);
-        }
-
-        bounding_box = create_bounding_box(enemy_sprite, enemy_size);
-    }
-};
 
 void add_enemies(bn::vector<Enemy, MAX_ENEMY> &enemies, bn::fixed x_spawn, bn::fixed y_spawn)
 {
