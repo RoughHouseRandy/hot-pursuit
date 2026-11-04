@@ -9,6 +9,7 @@
 #include "Enemy.h"
 #include "methods.h"
 #include "score_display.h"
+#include "power_up.h"
 
 // Width and height of the the player bounding box
 static constexpr bn::size PLAYER_SIZE = {8, 8};
