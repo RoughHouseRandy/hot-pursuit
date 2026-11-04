@@ -14,6 +14,7 @@
 #include "create_bounding_box.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "methods.h"
 
 // Width and height of the the player bounding box
 static constexpr bn::size PLAYER_SIZE = {8, 8};
@@ -26,23 +27,6 @@ static constexpr int MAX_X = bn::display::width() / 2;
 
 // Number of characters required to show two of the longest numer possible in an int (-2147483647)
 static constexpr int MAX_SCORE_CHARS = 22;
-
-// Create a random number generator seed
-bn::random gen;
-
-// Method to generate random x-coordinate
-bn::fixed random_x_gen()
-{
-    bn::fixed random_x = gen.get_fixed(MIN_X, MAX_X);
-    return random_x;
-}
-
-// Method to generate random y-coordinate
-bn::fixed random_y_gen()
-{
-    bn::fixed random_y = gen.get_fixed(MIN_Y, MAX_Y);
-    return random_y;
-}
 
 // Score location
 static constexpr int SCORE_X = 70;
@@ -124,16 +108,6 @@ public:
     bn::vector<bn::sprite_ptr, MAX_SCORE_CHARS> score_sprites; // Sprites to display scores
     bn::sprite_text_generator text_generator;                  // Text generator for scores
 };
-
-
-
-void add_enemies(bn::vector<Enemy, MAX_ENEMY> &enemies, bn::fixed x_spawn, bn::fixed y_spawn)
-{
-    if (enemies.size() < enemies.max_size())
-    {
-        enemies.push_back(Enemy(x_spawn, y_spawn));
-    }
-}
 
 int main()
 {
