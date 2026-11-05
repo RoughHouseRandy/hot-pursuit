@@ -1,19 +1,11 @@
 #include <bn_core.h>
 #include <bn_display.h>
-#include <bn_keypad.h>
 
-#include "bn_sprite_items_dot.h"
-#include "bn_sprite_items_square.h"
 #include "create_bounding_box.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "methods.h"
 #include "score_display.h"
-#include "power_up.h"
-
-// Width and height of the the player bounding box
-static constexpr bn::size PLAYER_SIZE = {8, 8};
-static constexpr bn::size ENEMY_SIZE = {8, 8};
 
 static constexpr int MIN_Y = -bn::display::height() / 2;
 static constexpr int MAX_Y = bn::display::height() / 2;
