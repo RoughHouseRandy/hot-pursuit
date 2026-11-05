@@ -34,6 +34,7 @@ public:
      * Returns score
      */
     int get_score();
+    void clear();
 
     int score;                                                 // current score
     int high_score;                                            // best core

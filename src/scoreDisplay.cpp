@@ -58,3 +58,8 @@ int ScoreDisplay::get_score()
 {
     return score;
 };
+
+void ScoreDisplay::clear()
+{
+    score_sprites.clear();
+};

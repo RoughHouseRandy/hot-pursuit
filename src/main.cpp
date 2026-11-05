@@ -1,13 +1,16 @@
 #include <bn_core.h>
 #include <bn_display.h>
-
+#include <bn_log.h>
 #include "create_bounding_box.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "methods.h"
 #include "score_display.h"
+#include "bn_regular_bg_items_cavebackground.h"
 #include "bn_regular_bg_items_winner.h"
 #include "bn_regular_bg_ptr.h"
+#include <bn_music_items.h>
+#include <bn_sound_items.h>
 
 static constexpr int MIN_Y = -bn::display::height() / 2;
 static constexpr int MAX_Y = bn::display::height() / 2;
@@ -29,6 +32,11 @@ int main()
 {
     bn::core::init();
 
+    bn::regular_bg_ptr background = bn::regular_bg_items::cavebackground.create_bg(0,0);
+
+    //Play the bgm
+    bn::music_items::zombi2.play();
+
     // Create a new score display
     ScoreDisplay scoreDisplay = ScoreDisplay();
 
@@ -37,8 +45,8 @@ int main()
     Player player = Player(START_X, START_Y);
 
     bn::vector<Enemy, MAX_ENEMY> enemies = {};
-
     // Spawn the first enemy
+    bn::sound_items::zombiegrowl.play();
     enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
 
     int enemySpawner = 0;
@@ -63,9 +71,11 @@ int main()
                 scoreDisplay.resetScore();
                 player.sprite.set_x(START_X);
                 player.sprite.set_y(START_Y);
+                bn::sound_items::stop.play();
 
                 if (enemies.size() == 1)
                 {
+                    bn::sound_items::zombiegrowl.play();
                     enemy.enemy_sprite.set_x(random_x_gen());
                     enemy.enemy_sprite.set_y(random_y_gen());
                     enemySpawner = 0;
@@ -85,17 +95,30 @@ int main()
         {
             if (enemies.size() < MAX_ENEMY)
             {
+                bn::sound_items::zombiegrowl.play();
                 enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
             }
             enemySpawner = 0;
         }
 
-        if(scoreDisplay.get_score() == 2000){
-
+        BN_LOG(scoreDisplay.get_score());
+        if(scoreDisplay.get_score() >= 2000){
+            enemies.clear();
+            background = bn::regular_bg_items::winner.create_bg(0,0);
         }
 
         // Update the scores and display them
-        scoreDisplay.update();
+        if(scoreDisplay.get_score() <= 2000){
+            scoreDisplay.update();
+        } else {
+            scoreDisplay.clear();
+        }
+
+        if(bn::keypad::start_pressed()){
+            scoreDisplay.resetScore();
+            background = bn::regular_bg_items::cavebackground.create_bg(0,0);
+        }
+        
         enemySpawner++;
         bn::core::update();
     }
