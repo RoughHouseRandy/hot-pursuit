@@ -6,6 +6,8 @@
 #include "Enemy.h"
 #include "methods.h"
 #include "score_display.h"
+#include <bn_music_items.h>
+#include <bn_sound_items.h>
 
 static constexpr int MIN_Y = -bn::display::height() / 2;
 static constexpr int MAX_Y = bn::display::height() / 2;
@@ -27,6 +29,9 @@ int main()
 {
     bn::core::init();
 
+    //Play the bgm
+    bn::music_items::zombi2.play();
+
     // Create a new score display
     ScoreDisplay scoreDisplay = ScoreDisplay();
 
@@ -37,6 +42,7 @@ int main()
     bn::vector<Enemy, MAX_ENEMY> enemies = {};
 
     // Spawn the first enemy
+    bn::sound_items::zombiegrowl.play();
     enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
 
     int enemySpawner = 0;
@@ -61,9 +67,11 @@ int main()
                 scoreDisplay.resetScore();
                 player.sprite.set_x(START_X);
                 player.sprite.set_y(START_Y);
+                bn::sound_items::stop.play();
 
                 if (enemies.size() == 1)
                 {
+                    bn::sound_items::zombiegrowl.play();
                     enemy.enemy_sprite.set_x(random_x_gen());
                     enemy.enemy_sprite.set_y(random_y_gen());
                     enemySpawner = 0;
@@ -83,6 +91,7 @@ int main()
         {
             if (enemies.size() < MAX_ENEMY)
             {
+                bn::sound_items::zombiegrowl.play();
                 enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
             }
             enemySpawner = 0;
