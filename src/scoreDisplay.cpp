@@ -53,3 +53,8 @@ void ScoreDisplay::resetScore()
 {
     score = 0;
 };
+
+int ScoreDisplay::get_score()
+{
+    return score;
+};

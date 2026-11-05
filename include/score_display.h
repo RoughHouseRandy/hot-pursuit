@@ -30,6 +30,10 @@ public:
      * Sets score back to 0. Does NOT reset high score.
      */
     void resetScore();
+    /**
+     * Returns score
+     */
+    int get_score();
 
     int score;                                                 // current score
     int high_score;                                            // best core

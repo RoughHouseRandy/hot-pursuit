@@ -6,6 +6,8 @@
 #include "Enemy.h"
 #include "methods.h"
 #include "score_display.h"
+#include "bn_regular_bg_items_winner.h"
+#include "bn_regular_bg_ptr.h"
 
 static constexpr int MIN_Y = -bn::display::height() / 2;
 static constexpr int MAX_Y = bn::display::height() / 2;
@@ -86,6 +88,10 @@ int main()
                 enemies.push_back(Enemy(random_x_gen(), random_y_gen()));
             }
             enemySpawner = 0;
+        }
+
+        if(scoreDisplay.get_score() == 2000){
+
         }
 
         // Update the scores and display them
